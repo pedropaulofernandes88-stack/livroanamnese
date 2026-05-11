@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <script>(function () {
+      function makeStore() {
+        var data = {};
+        var api = {
+          getItem: function (k) { return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null; },
+          setItem: function (k, v) { data[k] = String(v); },
+          removeItem: function (k) { delete data[k]; },
+          clear: function () { data = {}; },
+          key: function (i) { return Object.keys(data)[i] || null; }
+        };
+        Object.defineProperty(api, 'length', { get: function () { return Object.keys(data).length; } });
+        return api;
+      }
+      function tryShim(name) {
+        var works = false;
+        try { works = !!window[name] && typeof window[name].getItem === 'function'; void window[name].length; }
+        catch (_) { works = false; }
+        if (works) return;
+        try { Object.defineProperty(window, name, { configurable: true, value: makeStore() }); }
+        catch (_) { try { window[name] = makeStore(); } catch (__) { } }
+      }
+      tryShim('localStorage');
+      tryShim('sessionStorage');
+    })();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anamnese Estratégica — Proteção Clínica e Jurídica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #1a2744;
+      --bg-alt: #0f1a30;
+      --surface: #243356;
+      --fg: #ffffff;
+      --fg-sec: #a0aec0;
+      --accent: #c9a84c;
+      --accent-dk: #a8873e;
+
+      --font-disp: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+      --max-w: 1100px;
+      --px: clamp(1.5rem, 5vw, 4rem);
+      --py: clamp(4.5rem, 9vw, 7.5rem);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(1.9rem, 3.8vw, 3rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+
+    h2 {
+      font-family: var(--font-body);
+      font-size: clamp(1.5rem, 2.8vw, 2.125rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--fg);
+    }
+
+    h3 {
+      font-family: var(--font-body);
+      font-size: clamp(1.15rem, 2vw, 1.35rem);
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    h4 {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    p {
+      color: var(--fg-sec);
+      margin-bottom: 1rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      color: var(--fg);
+    }
+
+    .cta-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #1a2744;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      padding: 1.1rem 2.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+    }
+
+    .cta-primary:hover {
+      background: var(--accent-dk);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.25);
+    }
+
+    .cta-grande {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 1rem;
+      padding: 1.2rem 2rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .cta-note {
+      font-size: 0.82rem;
+      color: var(--fg-sec);
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .hero-cta-group .cta-note {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    section+section {
+      border-top: 1px solid rgba(201, 168, 76, 0.08);
+    }
+
+    /* HERO */
+    #hero {
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: var(--py) var(--px);
+      min-height: 92vh;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      align-items: flex-start;
+    }
+
+    .hero-subheadline {
+      font-size: 1.075rem;
+      line-height: 1.7;
+      color: var(--fg-sec);
+      font-weight: 300;
+      margin: 0;
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-visual img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.35), 0 32px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .badge-modelos {
+      position: absolute;
+      bottom: -1.25rem;
+      right: -0.75rem;
+      background: var(--accent);
+      color: #1a2744;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.65rem 1.1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.4);
+      white-space: nowrap;
+    }
+
+    /* PROBLEMA */
+    #problema {
+      background: var(--bg-alt);
+      padding: var(--py) var(--px);
+    }
+
+    #problema>* {
+      max-width: 740px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #problema h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #problema p {
+      font-size: 1.025rem;
+    }
+
+    .bloco-impacto {
+      border-left: 4px solid var(--accent);
+      background: rgba(201, 168, 76, 0.06);
+      padding: 1.75rem 2.25rem;
+      margin: 2.25rem 0;
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: 1.35rem;
+      line-height: 1.55;
+      color: var(--fg);
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* SOLUÇÃO */
+    #solucao {
+      background: var(--bg);
+      padding: var(--py) var(--px);
+    }
+
+    #solucao>h2 {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 3rem;
+    }
+
+    .produto-apresentacao {
+      display: grid;
+      grid-template-columns: 1fr 1.65fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .produto-visual {
+      position: relative;
+    }
+
+    .produto-visual img {
+      display: block;
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+
+    .badge-edicao {
+      position: absolute;
+      top: 1.25rem;
+      left: -0.6rem;
+      background: var(--accent);
+      color: #1a2744;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      box-shadow: 0 4px 14px rgba(201, 168, 76, 0.35);
+    }
+
+    .produto-texto h3 {
+      font-family: var(--font-disp);
+      font-size: clamp(1.4rem, 2.5vw, 1.875rem);
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 0.25rem;
+      line-height: 1.25;
+    }
+
+    .produto-texto .autores {
+      color: var(--accent);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    /* CONTEÚDO */
+    #conteudo {
+      background: var(--bg-alt);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #conteudo>h2 {
+      max-width: 680px;
+      margin: 0 auto 2.75rem;
+    }
+
+    .cards-conteudo {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--surface);
+      border-top: 2px solid var(--accent);
+      border-radius: 0 0 6px 6px;
+      padding: 1.5rem;
+      text-align: left;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card h4 {
+      margin-bottom: 0.6rem;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    /* PARA QUEM */
+    #para-quem {
+      background: var(--bg);
+      padding: var(--py) var(--px);
+    }
+
+    #para-quem>h2 {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .lista-perfil {
+      list-style: none;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .lista-perfil li {
+      padding: 0.875rem 0;
+      font-size: 1.025rem;
+      color: var(--fg-sec);
+      line-height: 1.6;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .lista-perfil li::first-letter {
+      color: var(--accent);
+      font-size: 1.15em;
+      font-weight: 700;
+    }
+
+    .bloco-exclusao {
+      max-width: 760px;
+      margin: 2rem auto 0;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 1.25rem 1.75rem;
+    }
+
+    .bloco-exclusao p {
+      font-style: italic;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* AUTORES */
+    #autores {
+      background: var(--bg-alt);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #autores>h2 {
+      margin-bottom: 3rem;
+    }
+
+    .autores-grid {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .autor {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .autor img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(201, 168, 76, 0.1), 0 12px 32px rgba(0, 0, 0, 0.4);
+      object-fit: cover;
+    }
+
+    .autor h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    #autores>p {
+      max-width: 640px;
+      margin: 0 auto 0.75rem;
+    }
+
+    .quote-autores {
+      position: relative;
+      max-width: 640px;
+      margin: 3rem auto 0;
+      padding: 1rem 3rem;
+      text-align: center;
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.625rem);
+      color: var(--fg);
+      line-height: 1.5;
+    }
+
+    .quote-autores::before {
+      content: '\201C';
+      font-family: var(--font-disp);
+      font-size: 9rem;
+      color: var(--accent);
+      opacity: 0.3;
+      position: absolute;
+      top: -2rem;
+      left: 0;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .quote-autores cite {
+      display: block;
+      margin-top: 1.25rem;
+      font-style: normal;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* DIFERENCIAIS */
+    #diferenciais {
+      background: var(--bg);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #diferenciais>h2 {
+      max-width: 740px;
+      margin: 0 auto 2.75rem;
+    }
+
+    .cards-diferenciais {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .card-diferencial {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      text-align: left;
+      transition: transform 0.2s ease;
+    }
+
+    .card-diferencial:hover {
+      transform: translateY(-3px);
+    }
+
+    .card-diferencial i {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .card-diferencial:hover i {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    .card-diferencial h4 {
+      margin-bottom: 0.65rem;
+    }
+
+    .card-diferencial p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    /* PREÇO CONTEXTO */
+    #preco-contexto {
+      background: var(--bg-alt);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #preco-contexto h2 {
+      font-family: var(--font-disp);
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      color: var(--accent);
+      max-width: 760px;
+      margin: 0 auto 2rem;
+      font-weight: 700;
+    }
+
+    #preco-contexto>p {
+      max-width: 640px;
+      margin: 0 auto 1rem;
+      font-size: 1.025rem;
+    }
+
+    #preco-contexto .cta-primary {
+      margin-top: 2.25rem;
+    }
+
+    /* OFERTA */
+    #oferta {
+      background: var(--bg);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #oferta>h2 {
+      max-width: 720px;
+      margin: 0 auto 2.75rem;
+    }
+
+    .box-oferta {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3rem;
+      align-items: start;
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1.5px solid var(--accent);
+      border-radius: 12px;
+      padding: 3rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 16px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(201, 168, 76, 0.08), 0 40px 100px rgba(0, 0, 0, 0.4);
+      text-align: left;
+    }
+
+    .oferta-visual img {
+      display: block;
+      width: 200px;
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .oferta-detalhes h3 {
+      font-family: var(--font-disp);
+      font-size: clamp(1.25rem, 2vw, 1.625rem);
+      color: var(--fg);
+      margin-bottom: 0.25rem;
+      line-height: 1.25;
+    }
+
+    .edicao-label {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem !important;
+    }
+
+    .lista-beneficios {
+      list-style: none;
+      margin-bottom: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .lista-beneficios li {
+      font-size: 0.925rem;
+      color: var(--fg-sec);
+      line-height: 1.55;
+    }
+
+    .lista-beneficios li::first-letter {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+
+    .preco-bloco {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .preco-de {
+      font-size: 0.9rem;
+      color: var(--fg-sec);
+    }
+
+    .preco-de s {
+      opacity: 0.65;
+    }
+
+    .preco-por {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: var(--fg-sec);
+    }
+
+    .preco-por strong {
+      font-family: var(--font-disp);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .preco-nota {
+      font-size: 0.78rem;
+      color: var(--fg-sec);
+      margin: 0.25rem 0 0;
+    }
+
+    .garantias {
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--fg-sec);
+      text-align: center;
+    }
+
+    /* FAQ */
+    #faq {
+      background: var(--bg-alt);
+      padding: var(--py) var(--px);
+      text-align: center;
+    }
+
+    #faq>h2 {
+      margin-bottom: 2.75rem;
+    }
+
+    .faq-lista {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+    }
+
+    .faq-item:first-child {
+      border-top: 1px solid rgba(201, 168, 76, 0.18);
+    }
+
+    .faq-item summary {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      user-select: none;
+      transition: color 0.15s ease;
+    }
+
+    .faq-item summary:hover {
+      color: var(--accent);
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      color: var(--accent);
+      font-size: 1.6rem;
+      font-weight: 300;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      padding: 0 0 1.5rem;
+      margin: 0;
+      color: var(--fg-sec);
+      font-size: 0.975rem;
+      line-height: 1.7;
+    }
+
+    /* FECHAMENTO */
+    #fechamento {
+      background: linear-gradient(180deg, var(--bg-alt) 0%, #070d1c 100%);
+      padding: var(--py) var(--px);
+      padding-bottom: calc(var(--py) * 1.4);
+      text-align: center;
+    }
+
+    #fechamento>h2 {
+      font-family: var(--font-disp);
+      font-size: clamp(1.6rem, 3vw, 2.5rem);
+      font-style: italic;
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      line-height: 1.25;
+    }
+
+    #fechamento>p {
+      max-width: 600px;
+      margin: 0 auto 0.875rem;
+      font-size: 1.025rem;
+    }
+
+    #fechamento strong {
+      display: block;
+      font-family: var(--font-disp);
+      font-style: italic;
+      font-size: clamp(1.875rem, 4vw, 2.5rem);
+      color: var(--accent);
+      max-width: 720px;
+      margin: 2rem auto;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    #fechamento .cta-primary {
+      font-size: 1rem;
+      padding: 1.25rem 3rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060c18;
+      padding: 2.5rem var(--px);
+      text-align: center;
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      color: var(--fg-sec);
+      margin-bottom: 0.5rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      font-size: 0.82rem;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      #hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        text-align: center;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .hero-visual img {
+        max-width: 260px;
+      }
+
+      .hero-content {
+        align-items: center;
+      }
+
+      .hero-cta-group {
+        align-items: center;
+      }
+
+      .hero-cta-group .cta-note {
+        text-align: center;
+      }
+
+      .produto-apresentacao {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .produto-visual {
+        display: flex;
+        justify-content: center;
+      }
+
+      .produto-visual img {
+        max-width: 260px;
+      }
+
+      .badge-edicao {
+        left: auto;
+        right: 0.5rem;
+      }
+
+      .cards-conteudo {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cards-diferenciais {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .box-oferta {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 2.25rem 2rem;
+      }
+
+      .oferta-visual {
+        display: flex;
+        justify-content: center;
+      }
+
+      .oferta-visual img {
+        width: 160px;
+      }
+
+      .preco-por {
+        justify-content: center;
+      }
+
+      .autores-grid {
+        gap: 2.5rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .cards-conteudo {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-diferenciais {
+        grid-template-columns: 1fr;
+      }
+
+      .autores-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .box-oferta {
+        padding: 1.75rem 1.25rem;
+        gap: 2rem;
+      }
+
+      .badge-modelos {
+        font-size: 0.65rem;
+        padding: 0.5rem 0.85rem;
+        right: 0.25rem;
+        bottom: -0.75rem;
+      }
+
+      .quote-autores {
+        padding: 1rem 1.25rem;
+      }
+
+      .quote-autores::before {
+        font-size: 6rem;
+        top: -1.5rem;
+      }
+
+      #fechamento strong {
+        font-size: clamp(1.75rem, 8vw, 3rem);
+      }
+
+      .cta-primary {
+        display: block;
+        width: 100%;
+        padding: 1.1rem 1rem;
+        font-size: 0.9rem;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      .hero-cta-group {
+        width: 100%;
+        padding: 0 1rem;
+        margin-top: 2rem !important;
+      }
+    }
+  </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Você dedica sua vida a cuidar de pessoas.<br>Mas quem cuida da sua segurança jurídica?</h1>
+      <p class="hero-subheadline">
+        As ações judiciais contra profissionais de saúde cresceram quase 50% na última década.
+        Na maioria dos casos, o profissional não errou na técnica — simplesmente não conseguiu provar que agiu
+        corretamente.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#oferta" class="cta-primary">→ Quero proteger minha carreira agora</a>
+        <p class="cta-note">Acesso imediato ao livro</p>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="mous0okv-capa-livro.jpg" alt="Capa do livro Anamnese Estratégica — Proteção Clínica e Jurídica" />
+      <div class="badge-modelos">+15 Modelos Prontos para Usar</div>
+    </div>
+  </section>
+
+  <section id="problema">
+    <h2>As ações judiciais contra profissionais de saúde cresceram quase 50% na última década</h2>
+    <p>Você estudou anos para dominar a técnica. Fez residência, especializações, atualiza seu conhecimento
+      constantemente.</p>
+    <p>Mas existe uma verdade desconfortável que nenhuma faculdade ensina:</p>
+    <p><strong>O juiz não esteve na sala de consulta com você.</strong></p>
+    <p>Ele vai julgar o que está escrito. E se não estiver escrito, para o Direito, simplesmente não aconteceu.</p>
+    <blockquote class="bloco-impacto">
+      "Na maioria dos casos analisados, o profissional não errou na técnica — simplesmente não conseguiu provar que agiu
+      corretamente."
+    </blockquote>
+    <p>Você já pensou no que aconteceria se um paciente te processasse amanhã?</p>
+    <p>Seu prontuário provaria que você explicou os riscos? Que o paciente recusou o procedimento e assinou? Que o
+      consentimento foi informado de verdade?</p>
+    <p>A maioria dos profissionais que responde "sim" com segurança — quando o advogado abre o arquivo — descobre que
+      não.</p>
+  </section>
+
+  <section id="solucao">
+    <h2>Apresentando o primeiro guia brasileiro que transforma sua consulta em um escudo jurídico</h2>
+    <div class="produto-apresentacao">
+      <div class="produto-visual">
+        <img src="mous0okv-capa-livro.jpg" alt="Capa do livro Anamnese Estratégica — Edição Institucional" />
+        <div class="badge-edicao">Edição Institucional</div>
+      </div>
+      <div class="produto-texto">
+        <h3>Anamnese Estratégica: Proteção Clínica e Jurídica</h3>
+        <p class="autores">por Prof. Luiz Fernando Moreira e Prof. Pedro Fernandes</p>
+        <p>Não é mais um livro de anamnese clínica.<br>Não é um manual jurídico cheio de juridiquês.</p>
+        <p>É o método que une, pela primeira vez de forma integrada, o rigor técnico da boa anamnese com a inteligência
+          jurídica da documentação defensiva — baseado em jurisprudência consolidada do STJ, Resoluções do CFM e
+          diretrizes do CDC.</p>
+        <p><strong>Um método replicável. Implementável em 48 horas. Que protege sua carreira pelos próximos 20
+            anos.</strong></p>
+      </div>
+    </div>
+    <div class="hero-cta-group" style="margin-top: 3.5rem;">
+      <a href="#oferta" class="cta-primary">→ Quero aplicar este método hoje</a>
+      <p class="cta-note">Acesso imediato ao livro digital</p>
+    </div>
+  </section>
+
+  <section id="conteudo">
+    <h2>O que você vai dominar nos 12 capítulos</h2>
+    <div class="cards-conteudo">
+      <div class="card">
+        <h4>Responsabilidade civil moderna</h4>
+        <p>Você vai entender exatamente quando é obrigação de meio ou resultado — e como isso muda sua estratégia de
+          documentação.</p>
+      </div>
+      <div class="card">
+        <h4>+15 modelos prontos por especialidade</h4>
+        <p>Anamneses, TCLEs blindados, registros de recusa, termos de alta — prontos para adaptar e usar amanhã.</p>
+      </div>
+      <div class="card">
+        <h4>8+ casos reais dissecados</h4>
+        <p>Veja linha por linha o que o juiz valorizou para condenar ou absolver — e aprenda com os dois lados.</p>
+      </div>
+      <div class="card">
+        <h4>Prontuário eletrônico e IA clínica</h4>
+        <p>Como usar ferramentas modernas sem criar brechas processuais que você nem imagina existir.</p>
+      </div>
+      <div class="card">
+        <h4>Telemedicina segura em 2026</h4>
+        <p>O que registrar, como armazenar, quais consentimentos são obrigatórios — atualizado para a realidade atual.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Checklists operacionais</h4>
+        <p>Implementáveis em plantão, consultório ou clínica em menos de 48 horas.</p>
+      </div>
+      <div class="card">
+        <h4>Registro de recusa e omissão</h4>
+        <p>O ponto cego que derruba profissionais tecnicamente corretos — e como blindar esse gap.</p>
+      </div>
+      <div class="card">
+        <h4>Compliance clínico aplicado</h4>
+        <p>Da consulta inicial à guarda documental — com checklist de auditoria interna pronto.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="para-quem">
+    <h2>Este livro é para você se...</h2>
+    <ul class="lista-perfil">
+      <li>✓ Você atende pacientes e sabe que um processo pode aparecer do nada — mesmo quando você fez tudo certo.</li>
+      <li>✓ Você trabalha com cirurgia, estética, emergência, obstetrícia, oncologia ou qualquer procedimento de alto
+        risco jurídico.</li>
+      <li>✓ Você é dentista, psicólogo, fisioterapeuta, nutricionista, fonoaudiólogo, terapeuta ou enfermeiro — e sabe
+        que sua categoria também está no radar dos processos.</li>
+      <li>✓ Você gere uma clínica ou hospital e precisa padronizar a documentação da sua equipe.</li>
+      <li>✓ Você é advogado especializado em Direito Médico, auditor de compliance ou perito judicial e quer uma
+        referência técnica integrada.</li>
+    </ul>
+    <div class="bloco-exclusao">
+      <p>Este livro <strong>não é</strong> para quem acha que "isso nunca vai acontecer comigo". Infelizmente, as
+        estatísticas discordam.</p>
+    </div>
+    <div class="hero-cta-group" style="margin-top: 3.5rem;">
+      <a href="#oferta" class="cta-primary">→ Sim, eu preciso dessa proteção</a>
+      <p class="cta-note">Garantir meu exemplar agora</p>
+    </div>
+  </section>
+
+  <section id="autores">
+    <h2>Quem escreveu este método</h2>
+    <div class="autores-grid">
+      <div class="autor">
+        <img src="perfil-luiz-fernando-moreira.png" alt="Prof. Luiz Fernando Moreira" width="200" height="200" />
+        <h3>Prof. Luiz Fernando Moreira</h3>
+      </div>
+      <div class="autor">
+        <img src="perfil-pedro-fernandes.png" alt="Prof. Pedro Fernandes" width="200" height="200" />
+        <h3>Prof. Pedro Fernandes</h3>
+      </div>
+    </div>
+    <p>Mais de duas décadas de atuação na interseção entre prática clínica e direito médico — com artigos, formação
+      multidisciplinar e experiência direta nos dois lados da questão: a sala de consulta e o processo judicial.</p>
+    <p>Este livro não é teoria acadêmica. É o destilado do que realmente funciona quando o caso chega no tribunal.</p>
+    <blockquote class="quote-autores">
+      "O que não está no prontuário, juridicamente, não aconteceu."
+      <cite>— Luiz Fernando Moreira &amp; Pedro Fernandes</cite>
+    </blockquote>
+  </section>
+
+  <section id="diferenciais">
+    <h2>Por que esta edição é diferente de tudo que você já leu sobre documentação clínica</h2>
+    <div class="cards-diferenciais">
+      <div class="card-diferencial">
+        <i data-lucide="languages" width="40" height="40"></i>
+        <h4>Linguagem que respeita os dois lados</h4>
+        <p>Sem juridiquês para o clínico. Sem superficialidade médica para o jurista. Cada capítulo fala com você do
+          jeito que você precisa ouvir.</p>
+      </div>
+      <div class="card-diferencial">
+        <i data-lucide="gavel" width="40" height="40"></i>
+        <h4>Casos reais comentados linha por linha</h4>
+        <p>Não é teoria. São decisões reais do STJ e Tribunais de Justiça dissecadas para você entender o que salvou — e
+          o que afundou — cada profissional.</p>
+      </div>
+      <div class="card-diferencial">
+        <i data-lucide="clipboard-list" width="40" height="40"></i>
+        <h4>Modelos prontos para implementação imediata</h4>
+        <p>+15 documentos que você adapta para sua especialidade e começa a usar ainda esta semana. Sem precisar de
+          advogado para criar do zero.</p>
+      </div>
+      <div class="card-diferencial">
+        <i data-lucide="sparkles" width="40" height="40"></i>
+        <h4>Diagramação premium</h4>
+        <p>Callouts de alerta, boxes de modelos, comparativos condenação × absolvição, checklists destacáveis. Não é PDF
+          genérico — é ferramenta de trabalho.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="oferta">
+    <h2>Proteja sua carreira agora, pagando menos do que o valor de uma consulta</h2>
+    <div class="box-oferta">
+      <div class="oferta-visual">
+        <img src="mous0okv-capa-livro.jpg" alt="Anamnese Estratégica — Edição Institucional eBook" width="200" />
+      </div>
+      <div class="oferta-detalhes">
+        <h3>Anamnese Estratégica: Proteção Clínica e Jurídica</h3>
+        <p class="edicao-label">Edição Institucional — eBook Kindle</p>
+        <ul class="lista-beneficios">
+          <li>✓ 12 capítulos com método completo</li>
+          <li>✓ +15 modelos prontos por especialidade</li>
+          <li>✓ 8+ casos reais dissecados</li>
+          <li>✓ Checklists implementáveis em 48h</li>
+          <li>✓ Atualizado para telemedicina e IA em 2026</li>
+        </ul>
+        <div class="preco-bloco">
+          <span class="preco-de">De: <s>R$197</s></span>
+          <span class="preco-por">Por: <strong>R$97</strong></span>
+          <p class="preco-nota">Acesso imediato após a compra</p>
+        </div>
+        <a href="https://pay.hotmart.com/J105778854E" class="cta-primary cta-grande" target="_blank"
+          rel="noopener">→ QUERO MEU EXEMPLAR AGORA</a>
+        <p class="garantias">🔒 Compra segura &nbsp;·&nbsp; Acesso imediato &nbsp;·&nbsp; Compatível com
+          qualquer dispositivo</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Perguntas frequentes</h2>
+    <div class="faq-lista">
+      <details class="faq-item">
+        <summary>Preciso ter conhecimento jurídico para aproveitar o livro?</summary>
+        <p>Não. O livro foi escrito exatamente para quem vem da área clínica — a linguagem jurídica é apresentada de
+          forma acessível, com exemplos práticos e casos comentados.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Os modelos funcionam para minha especialidade?</summary>
+        <p>Os +15 modelos cobrem as principais especialidades médicas e áreas de saúde — anamneses, TCLEs, registros de
+          recusa e termos de alta. Todos são adaptáveis à sua realidade.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O conteúdo está atualizado?</summary>
+        <p>Sim. A edição cobre telemedicina em 2026, uso de IA clínica, jurisprudência recente do STJ e as Resoluções
+          vigentes do CFM.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como recebo o livro após a compra?</summary>
+        <p>É um eBook Kindle. Após a compra na Amazon, o acesso é imediato — você lê no app Kindle gratuito no celular,
+          tablet ou computador.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Funciona para outras categorias além de médicos?</summary>
+        <p>Sim. O método é aplicável a dentistas, psicólogos, fisioterapeutas, nutricionistas, fonoaudiólogos,
+          enfermeiros, terapeutas e gestores de clínicas.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="fechamento">
+    <h2>Leia hoje. Implemente amanhã. Proteja sua carreira pelos próximos 20 anos.</h2>
+    <p>Nenhum processo avisa que vai chegar.</p>
+    <p>Você pode continuar atendendo da mesma forma — e torcer para que nunca aconteça com você.</p>
+    <p>Ou pode construir, a partir de agora, uma rotina de documentação que protege cada consulta, cada procedimento,
+      cada decisão clínica que você toma.</p>
+    <strong>A diferença entre esses dois profissionais não está na competência técnica.<br>Está no prontuário.</strong>
+    <a href="#oferta" class="cta-primary cta-grande" style="max-width:460px;margin:0 auto;">→ QUERO PROTEGER MINHA
+      CARREIRA</a>
+    <p class="cta-note">Acesso imediato · Compra segura</p>
+  </section>
+
+  <footer>
+    <p>© 2026 Anamnese Estratégica · Luiz Fernando Moreira &amp; Pedro Fernandes</p>
+    </p>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>
